@@ -19,7 +19,11 @@ const initialState = {
     modulesCompleted: [],
     achievements: []
   },
-  facilitatorMode: false
+  facilitatorMode: false,
+  sessionActive: false
+  // Polling system
+  activePoll: null,
+  pollResults: {}
 };
 
 function appReducer(state, action) {
@@ -61,7 +65,45 @@ function appReducer(state, action) {
     
     case 'TOGGLE_FACILITATOR_MODE':
       return { ...state, facilitatorMode: !state.facilitatorMode };
-    
+
+    case 'SET_CURRENT_MODULE':
+  return { ...state, currentModule: action.payload };
+
+    case 'START_SESSION':
+      return { 
+        ...state, 
+        sessionActive: true,
+        currentModule: 1
+      };
+
+    case 'END_SESSION':
+      return { 
+        ...state, 
+        sessionActive: false,
+        currentModule: 0
+      };
+    case 'START_POLL':
+      return {
+        ...state,
+        activePoll: action.payload,
+        pollResults: {}
+      };
+
+    case 'END_POLL':
+      return {
+        ...state,
+        activePoll: null
+      };
+
+    case 'SUBMIT_POLL_RESPONSE':
+      const newResults = { ...state.pollResults };
+      const response = action.payload;
+      newResults[response] = (newResults[response] || 0) + 1;
+      return {
+        ...state,
+        pollResults: newResults
+      };
+
     default:
       return state;
   }
@@ -80,6 +122,23 @@ function calculateReadinessScore(answers) {
   const total = scores.reduce((sum, score) => sum + score, 0);
   return Math.min(100, Math.round((total / (scores.length * 5)) * 100));
 }
+
+export const actionTypes = {
+  SET_STEP: 'SET_STEP',
+  UPDATE_USER_PROFILE: 'UPDATE_USER_PROFILE', 
+  SET_ASSESSMENT_ANSWER: 'SET_ASSESSMENT_ANSWER',
+  CALCULATE_READINESS_SCORE: 'CALCULATE_READINESS_SCORE',
+  SET_BUDDY: 'SET_BUDDY',
+  COMPLETE_ONBOARDING: 'COMPLETE_ONBOARDING',
+  TOGGLE_FACILITATOR_MODE: 'TOGGLE_FACILITATOR_MODE',
+  SET_CURRENT_MODULE: 'SET_CURRENT_MODULE',
+  START_SESSION: 'START_SESSION',
+  END_SESSION: 'END_SESSION',
+  // NUOVI per polling
+  START_POLL: 'START_POLL',
+  END_POLL: 'END_POLL',
+  SUBMIT_POLL_RESPONSE: 'SUBMIT_POLL_RESPONSE'
+};
 
 export function AppProvider({ children }) {
   const [state, dispatch] = useReducer(appReducer, initialState);

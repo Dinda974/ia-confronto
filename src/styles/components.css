@@ -52,6 +52,7 @@
   font-size: 1rem;
   opacity: 0.9;
   font-weight: 300;
+  color: white !important;  /* <- BIANCO FORZATO */
 }
 
 .facilitator-toggle {
@@ -357,6 +358,7 @@
 .footer p {
   margin: 0;
   font-size: 0.875rem;
+  color: white !important;  /* <- BIANCO FORZATO */
   opacity: 0.8;
 }
 
@@ -1802,5 +1804,490 @@
   .recommendations,
   .personal-insights {
     margin-bottom: 2rem;
+  }
+}
+/* ===== MODULE OVERVIEW STYLES ===== */
+.module-overview,
+.facilitator-dashboard,
+.waiting-screen {
+  width: 100%;
+  max-width: 1200px;
+}
+
+/* ===== FACILITATOR DASHBOARD STYLES ===== */
+.facilitator-dashboard h2 {
+  color: #2d3748;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.session-controls {
+  background: #f7fafc;
+  padding: 2rem;
+  border-radius: 12px;
+  border-left: 4px solid #667eea;
+}
+
+.session-status {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.module-control {
+  margin-bottom: 1.5rem;
+}
+
+.module-control label {
+  display: block;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 0.5rem;
+}
+
+.module-control select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+}
+
+.session-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* ===== WAITING SCREEN STYLES ===== */
+.waiting-content {
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.waiting-content h2 {
+  color:  #ffffff;  /* <- BIANCO */
+  margin-bottom: 1rem;
+}
+
+.waiting-content p {
+  color: #2d3748;  /* <- COLORE PIÙ SCURO */
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
+}
+
+.modules-preview h3 {
+  color: #4a5568;
+  margin-bottom: 2rem;
+}
+
+.modules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.module-preview-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.module-preview-card:hover {
+  transform: translateY(-5px);
+}
+
+.module-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.module-preview-card h4 {
+  color: #667eea;
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.module-preview-card h5 {
+  color: #2d3748;
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+}
+
+.module-preview-card p {
+  color: #718096;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.duration {
+  color: #4a5568;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* ===== LIVE SESSION STYLES ===== */
+.session-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.session-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.live-badge {
+  background: #e53e3e;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  animation: pulse 2s infinite;
+}
+
+.session-info h2 {
+  margin: 0;
+  color: #2d3748;
+}
+
+.current-module {
+  text-align: right;
+}
+
+.current-label {
+  color: #718096;
+  font-size: 0.9rem;
+}
+
+.module-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+/* ===== MODULE CARDS STYLES ===== */
+.module-card {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.module-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+}
+
+.module-card.active {
+  border-color: #667eea;
+  box-shadow: 0 8px 30px rgba(102, 126, 234, 0.2);
+}
+
+.module-card.completed {
+  border-color: #38a169;
+}
+
+.module-header {
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.module-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.module-info h3 {
+  margin: 0;
+  color: #2d3748;
+  font-size: 1.1rem;
+}
+
+.module-info h4 {
+  margin: 0.25rem 0 0 0;
+  color: #4a5568;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.module-status {
+  font-size: 1.5rem;
+}
+
+.module-content {
+  padding: 1.5rem;
+}
+
+.module-content p {
+  color: #718096;
+  font-size: 0.9rem;
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
+}
+
+.module-meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: #4a5568;
+}
+
+/* ===== RESPONSIVE MODULE OVERVIEW ===== */
+@media (max-width: 768px) {
+  .session-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .current-module {
+    text-align: center;
+  }
+  
+  .modules-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .session-buttons {
+    flex-direction: column;
+  }
+  
+  .session-buttons .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .module-preview-card {
+    padding: 1rem;
+  }
+  
+  .module-icon {
+    font-size: 2rem;
+  }
+  
+  .session-controls {
+    padding: 1.5rem;
+  }
+}
+/* ===== FIX CONTRASTI ===== */
+.session-status {
+  color: #2d3748 !important;
+  font-weight: 700 !important;
+}
+
+.current-label {
+  color: #4a5568 !important;
+  font-weight: 600 !important;
+}
+
+.module-indicator {
+  color: #2d3748 !important;
+  font-weight: 700 !important;
+}
+
+.module-info h3,
+.module-info h4 {
+  color: #2d3748 !important;
+}
+
+.module-content p {
+  color: #4a5568 !important;
+}
+
+/* ===== POLL PARTICIPANT STYLES ===== */
+.poll-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.poll-container {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 90%;
+  overflow: hidden;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.poll-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.poll-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.poll-question {
+  padding: 2rem;
+  text-align: center;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.poll-question h4 {
+  margin: 0;
+  color: #2d3748;
+  font-size: 1.2rem;
+  line-height: 1.4;
+}
+
+.poll-options {
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.poll-option {
+  background: #f7fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.poll-option:hover {
+  border-color: #667eea;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2);
+}
+
+.poll-option.selected {
+  border-color: #667eea;
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.option-icon {
+  font-size: 2rem;
+}
+
+.option-text {
+  font-size: 1rem;
+}
+
+.poll-actions {
+  padding: 1.5rem 2rem;
+  text-align: center;
+  border-top: 1px solid #e2e8f0;
+}
+
+.poll-submitted {
+  padding: 2rem;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #38a169;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.submitted-icon {
+  font-size: 1.5rem;
+}
+
+.poll-results {
+  padding: 1.5rem 2rem;
+  background: #f8f9fa;
+  border-top: 1px solid #e2e8f0;
+}
+
+.poll-results h5 {
+  margin: 0 0 1rem 0;
+  color: #4a5568;
+  text-align: center;
+}
+
+.results-display {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.result-item {
+  background: white;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border-left: 3px solid #667eea;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+/* ===== RESPONSIVE POLL ===== */
+@media (max-width: 480px) {
+  .poll-container {
+    width: 95%;
+    margin: 1rem;
+  }
+  
+  .poll-options {
+    grid-template-columns: 1fr;
+    padding: 1.5rem;
+  }
+  
+  .poll-question,
+  .poll-header {
+    padding: 1.5rem;
   }
 }

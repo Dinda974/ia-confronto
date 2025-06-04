@@ -5,6 +5,7 @@ import WelcomeScreen from './components/Onboarding/WelcomeScreen';
 import CompetencyAssessment from './components/Onboarding/CompetencyAssessment';
 import ReadinessScore from './components/Onboarding/ReadinessScore'; // <- AGGIUNGI
 import BuddyMatching from './components/Onboarding/BuddyMatching'; // <- AGGIUNGI
+import ModuleOverview from './components/Shared/ModuleOverview';
 import { loadProgress } from './utils/storage';
 import './styles/global.css';
 import './styles/components.css';
@@ -41,7 +42,7 @@ function AppContent() {
       case 'buddy':
         return <BuddyMatching />; // <- CAMBIA QUESTA RIGA
       case 'modules':
-        return <div>Modules Component (prossimo step)</div>;
+        return <ModuleOverview />;
       default:
         return <WelcomeScreen />;
     }

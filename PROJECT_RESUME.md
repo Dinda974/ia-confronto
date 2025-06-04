@@ -239,10 +239,14 @@ Branch: main
 
 ## 💡 PROMPT PER NUOVA CHAT
 
-"Ciao! Sto continuando lo sviluppo di una SPA React per un seminario interattivo sull'IA per amministratori di condominio. Ho completato l'onboarding (Welcome, Assessment, ReadinessScore, BuddyMatching) e ora devo implementare i moduli del seminario con funzionalità interattive.
+"Ciao! Sto continuando lo sviluppo di una SPA React per un seminario interattivo sull'IA per amministratori di condominio. Ho completato l'onboarding e ora devo implementare i moduli del seminario.
 
 Repository: https://github.com/Dinda974/ia-confronto
 
-Ho questo PROJECT_RESUME.md con tutti i dettagli del progetto. Prossimo obiettivo: creare il sistema dei moduli del seminario con dashboard facilitatore e polling live.
+Ti allego:
+- PROJECT_RESUME.md (stato progetto e architettura)
+- I 3 file docx con i contenuti dettagliati dei moduli
 
-Vuoi che condivida il contenuto del PROJECT_RESUME.md e continuiamo da dove abbiamo lasciato?"
+Prossimo obiettivo: implementare il sistema dei moduli del seminario con dashboard facilitatore e polling live, usando i contenuti specifici dai file allegati.
+
+Partiamo?"
