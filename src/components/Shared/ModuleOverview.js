@@ -1,4 +1,5 @@
 import React from 'react';
+import PollParticipant from './PollParticipant';
 import { useApp } from '../../contexts/AppContext';
 
 function ModuleOverview() {
@@ -34,6 +35,31 @@ function ModuleOverview() {
       duration: 60,
       icon: "🎯"
     }
+  ];
+
+  // Funzioni per gestire i poll (solo facilitatore)
+  const startPoll = (question, type = 'yesno') => {
+    dispatch({
+      type: 'START_POLL',
+      payload: {
+        question,
+        type,
+        timestamp: new Date().toISOString()
+      }
+    });
+  };
+
+  const endPoll = () => {
+    dispatch({ type: 'END_POLL' });
+  };
+
+  // Poll predefiniti per il seminario
+  const quickPolls = [
+    "Avete mai usato ChatGPT per lavoro?",
+    "Vi sentite pronti ad adottare l'IA nel vostro studio?",
+    "Pensate che l'IA migliorerà il vostro lavoro?",
+    "Avete preoccupazioni sulla privacy dei dati con l'IA?",
+    "Implementerete almeno uno strumento IA nei prossimi 3 mesi?"
   ];
 
   // ===== VISTA FACILITATORE =====
@@ -81,6 +107,71 @@ function ModuleOverview() {
               >
                 ⏹️ Termina Sessione
               </button>
+            </div>
+
+            {/* CONTROLLI POLLING */}
+            <div className="poll-controls">
+              <h3>📊 Controlli Polling</h3>
+              
+              {state.activePoll ? (
+                <div className="active-poll-control">
+                  <div className="poll-info">
+                    <strong>Poll Attivo:</strong> {state.activePoll.question}
+                  </div>
+                  <div className="poll-results-live">
+                    <span>✅ Sì: {state.pollResults.yes || 0}</span>
+                    <span>❌ No: {state.pollResults.no || 0}</span>
+                    <span>📊 Totale: {(state.pollResults.yes || 0) + (state.pollResults.no || 0)}</span>
+                  </div>
+                  <button onClick={endPoll} className="btn-secondary">
+                    🛑 Termina Poll
+                  </button>
+                </div>
+              ) : (
+                <div className="poll-start-controls">
+                  <div className="quick-polls">
+                    <h4>Poll Rapidi:</h4>
+                    {quickPolls.map((question, index) => (
+                      <button
+                        key={index}
+                        onClick={() => startPoll(question)}
+                        className="btn-poll-quick"
+                        disabled={!state.sessionActive}
+                      >
+                        📋 {question}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="custom-poll">
+                    <h4>Poll Personalizzato:</h4>
+                    <input
+                      type="text"
+                      placeholder="Scrivi la tua domanda..."
+                      id="customPollInput"
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter' && e.target.value.trim()) {
+                          startPoll(e.target.value.trim());
+                          e.target.value = '';
+                        }
+                      }}
+                      disabled={!state.sessionActive}
+                    />
+                    <button
+                      onClick={() => {
+                        const input = document.getElementById('customPollInput');
+                        if (input.value.trim()) {
+                          startPoll(input.value.trim());
+                          input.value = '';
+                        }
+                      }}
+                      className="btn-primary"
+                      disabled={!state.sessionActive}
+                    >
+                      🚀 Lancia Poll
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -166,6 +257,9 @@ function ModuleOverview() {
           ))}
         </div>
       </div>
+
+      {/* POLLING OVERLAY PER PARTECIPANTI */}
+      <PollParticipant />
     </div>
   );
 }

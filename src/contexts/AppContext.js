@@ -20,7 +20,7 @@ const initialState = {
     achievements: []
   },
   facilitatorMode: false,
-  sessionActive: false
+  sessionActive: false,
   // Polling system
   activePoll: null,
   pollResults: {}
