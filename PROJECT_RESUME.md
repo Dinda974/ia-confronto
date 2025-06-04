@@ -5,25 +5,27 @@
 
 ### ✅ COMPLETATO
 - **Onboarding completo**: Welcome → Assessment → Score → Buddy Matching
-- **Sistema di stato**: Context API con AppContext.js
-- **Layout responsive**: Mobile-first con ottimizzazioni desktop
-- **CSS organizzato**: global.css + components.css
+- **Sistema di stato avanzato**: AppContext.js con stato seminario e polling
+- **Layout responsive**: Mobile-first con ottimizzazioni desktop  
+- **CSS organizzato**: global.css + components.css con contrasti sistemati
 - **Struttura modulare**: Componenti riutilizzabili
+- **Sistema moduli base**: ModuleOverview con dashboard facilitatore
+- **Polling system**: PollParticipant component (in fase di debug)
 
 ### 🚧 PROSSIMI STEP PRIORITARI
-1. **Moduli del seminario interattivo** (4 moduli principali)
-2. **Dashboard facilitatore** (controllo sessione live)
-3. **Sistema polling/sondaggi** live
+1. **Debug e integrazione polling** (sistema quasi completo)
+2. **Dashboard facilitatore avanzata** (controlli sezioni, stats)
+3. **Contenuti dettagliati moduli** (dai file docx forniti)
 4. **Workshop collaborativi** digitali
 5. **Materiali scaricabili** (PDF, risorse)
 
-## 📂 ARCHITETTURA PROGETTO
+## 📂 ARCHITETTURA PROGETTO AGGIORNATA
 
 ```
 src/
 ├── components/
 │   ├── Layout/
-│   │   ├── Header.js ✅
+│   │   ├── Header.js ✅ (con toggle facilitatore)
 │   │   └── Layout.js ✅
 │   ├── Onboarding/
 │   │   ├── WelcomeScreen.js ✅
@@ -32,34 +34,29 @@ src/
 │   │   └── BuddyMatching.js ✅
 │   ├── Shared/
 │   │   ├── ProgressBar.js ✅
-│   │   └── Button.js ✅
-│   └── [DA CREARE]
-│       ├── Modules/ (4 moduli seminario)
-│       ├── Facilitator/ (dashboard controllo)
-│       ├── Polling/ (sondaggi live)
-│       └── Workshop/ (attività collaborative)
+│   │   ├── Button.js ✅
+│   │   ├── ModuleOverview.js ✅ (nuovo)
+│   │   └── PollParticipant.js 🚧 (debug in corso)
+├── contexts/
+│   └── AppContext.js ✅ (aggiornato con seminario + polling)
 ├── data/
 │   └── content.js ✅ (assessment + moduli info)
 ├── styles/
 │   ├── global.css ✅
-│   └── components.css ✅
+│   └── components.css ✅ (esteso con moduli + polling)
 ├── utils/
 │   └── storage.js ✅
-├── contexts/
-│   └── AppContext.js ✅
-└── App.js ✅
+└── App.js ✅ (aggiornato con ModuleOverview)
 ```
 
 ## 🔧 SETUP TECNICO
 
-### Dipendenze Installate
+### Dipendenze
 ```json
 {
   "dependencies": {
     "react": "^18.x",
-    "react-dom": "^18.x",
-    "chart.js": "^4.x",
-    "react-chartjs-2": "^5.x"
+    "react-dom": "^18.x"
   }
 }
 ```
@@ -68,33 +65,67 @@ src/
 ```bash
 npm start          # Avvia dev server
 npm run build      # Build produzione
-npm install        # Installa dipendenze
+git add .          # Aggiungi modifiche
+git commit -m ""   # Commit
+git push origin main # Push su GitHub
 ```
 
-## 📋 CONTENUTI SEMINARIO (dal file giugno.docx)
+## 📋 SISTEMA MODULI IMPLEMENTATO
 
-### Moduli da Implementare:
-1. **"Dall'Euforia alla Strategia"** (75 min)
-   - Aggiornamenti IA recenti
-   - Framework RACE per prompt
-   - Workshop flash introduttivo
+### 🎛️ Dashboard Facilitatore
+**Funzionalità Attive:**
+- ✅ Toggle modalità facilitatore/partecipante
+- ✅ Controllo sessione (avvia/termina)
+- ✅ Selezione modulo corrente
+- ✅ Stati visivi sessione
+- 🚧 Lancio poll base (in debug)
 
-2. **"L'Amministratore Aumentato"** (90 min)
-   - Prompt Engineering avanzato
-   - Competenze umane insostituibili
-   - Laboratorio pratico
+**Prossime Implementazioni:**
+- Controllo sezioni singole
+- Stats partecipanti real-time
+- Reset/emergenza avanzato
+- Timer moduli
 
-3. **"Navigare il Labirinto dell'IA"** (75 min)
-   - Data governance
-   - Privacy by design
-   - AI Act e normative
+### 👥 Vista Partecipanti
+**Funzionalità Attive:**
+- ✅ Schermata attesa pre-sessione
+- ✅ Vista moduli live durante sessione
+- ✅ Indicatori stato moduli (attivo/completato/futuro)
+- ✅ Sincronizzazione con dashboard facilitatore
+- 🚧 Polling overlay (in debug)
 
-4. **"Implementare l'IA con Saggezza"** (60 min)
-   - Selezione soluzioni
-   - Change management
-   - Visione futura
+**Prossime Implementazioni:**
+- Workshop interattivi
+- Chat/comunicazione
+- Materiali scaricabili
 
-## 🎨 DESIGN SYSTEM
+## 📊 SISTEMA POLLING
+
+### Stato Attuale
+```javascript
+// In AppContext.js
+activePoll: null,      // Poll correntemente attivo
+pollResults: {}        // Risultati in tempo reale
+```
+
+### Actions Implementate
+- `START_POLL` - Avvia nuovo poll
+- `END_POLL` - Termina poll attivo  
+- `SUBMIT_POLL_RESPONSE` - Invia risposta partecipante
+
+### Componenti
+- ✅ **PollParticipant.js** - Interfaccia risposta (debug in corso)
+- 🚧 **Poll controls** in dashboard facilitatore
+- 🚧 **Real-time results** display
+
+### Tipologie Poll Previste
+1. ✅ Alzata mano digitale (Sì/No) - Implementata
+2. 🚧 Multiple choice - Da implementare
+3. 🚧 Scale 1-5 - Da implementare
+4. ⏳ Text input libero - Futuro
+5. ⏳ Nuvola parole - Futuro
+
+## 🎨 DESIGN SYSTEM AGGIORNATO
 
 ### Colori Principali
 ```css
@@ -102,9 +133,16 @@ npm install        # Installa dipendenze
 --secondary: #764ba2
 --success: #38a169
 --warning: #ed8936
---error: #f56565
+--error: #e53e3e
 --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)
 ```
+
+### Componenti Stilizzati
+- ✅ **Header** con toggle modalità
+- ✅ **Module cards** con stati visivi
+- ✅ **Dashboard controls** con stili consistenti
+- ✅ **Poll overlay** con animazioni
+- ✅ **Contrasti** ottimizzati per leggibilità
 
 ### Breakpoints
 ```css
@@ -114,139 +152,147 @@ npm install        # Installa dipendenze
 @media (min-width: 1200px) /* Desktop large */
 ```
 
-## 🔄 STATE MANAGEMENT
+## 🔄 STATE MANAGEMENT EVOLUTO
 
 ### AppContext State Structure
 ```javascript
 {
+  // Stato onboarding (esistente)
   currentStep: 'welcome' | 'assessment' | 'score' | 'buddy' | 'modules',
-  currentModule: 0,
-  userProfile: {
-    name: '',
-    email: '',
-    experience: '',
-    readinessScore: 0
-  },
+  userProfile: { name, email, experience, readinessScore },
   assessmentAnswers: {},
   buddy: null,
-  progress: {
-    onboardingComplete: false,
-    modulesCompleted: [],
-    achievements: []
-  },
-  facilitatorMode: false
+  progress: { onboardingComplete, modulesCompleted, achievements },
+  
+  // NUOVO: Stato seminario
+  currentModule: 0,           // 0-4, modulo attivo
+  facilitatorMode: false,     // true = dashboard controlli
+  sessionActive: false,      // true = sessione live
+  
+  // NUOVO: Sistema polling  
+  activePoll: null,          // { question, type, options }
+  pollResults: {}            // { yes: 5, no: 12 }
 }
 ```
 
-### Actions Implementate
-- SET_STEP
-- UPDATE_USER_PROFILE
-- SET_ASSESSMENT_ANSWER
-- CALCULATE_READINESS_SCORE
-- SET_BUDDY
-- COMPLETE_ONBOARDING
-- TOGGLE_FACILITATOR_MODE
+### Actions Disponibili
+**Onboarding:**
+- SET_STEP, UPDATE_USER_PROFILE, SET_ASSESSMENT_ANSWER
+- CALCULATE_READINESS_SCORE, SET_BUDDY, COMPLETE_ONBOARDING
 
-## 🎯 FEATURES DA IMPLEMENTARE
+**Seminario:**
+- TOGGLE_FACILITATOR_MODE, SET_CURRENT_MODULE
+- START_SESSION, END_SESSION
 
-### 1. Sistema Moduli (PRIORITÀ ALTA)
+**Polling:**
+- START_POLL, END_POLL, SUBMIT_POLL_RESPONSE
+
+## 📚 CONTENUTI SEMINARIO (Struttura da Implementare)
+
+### Moduli Definiti
 ```javascript
-// Componenti da creare:
-- ModuleOverview.js    (panoramica 4 moduli)
-- ModuleContent.js     (contenuto singolo modulo)
-- ModuleNavigation.js  (controlli modulo)
-- ActivityCard.js      (workshop/poll cards)
+const modules = [
+  {
+    id: 1,
+    title: "Dall'Euforia alla Strategia",
+    subtitle: "L'Evoluzione dell'IA nell'Amministrazione Condominiale", 
+    duration: 75, // minuti
+    icon: "🚀"
+  },
+  {
+    id: 2,
+    title: "L'Amministratore Aumentato", 
+    subtitle: "Nuove Competenze e Prompt Engineering Avanzato",
+    duration: 90,
+    icon: "🧠"
+  },
+  {
+    id: 3,
+    title: "Navigare il Labirinto dell'IA",
+    subtitle: "Etica, Normativa e Gestione Responsabile", 
+    duration: 75,
+    icon: "⚖️"
+  },
+  {
+    id: 4,
+    title: "Implementare l'IA con Saggezza",
+    subtitle: "Gestione del Cambiamento e Visione Futura",
+    duration: 60,
+    icon: "🎯"
+  }
+];
 ```
 
-### 2. Dashboard Facilitatore (PRIORITÀ ALTA)
-```javascript
-// Funzionalità necessarie:
-- Controllo step globale
-- Avanzamento forzato per tutti
-- Visualizzazione stats partecipanti
-- Lancio poll/sondaggi
-- Reset/emergenza
+### Contenuti Dettagliati Disponibili
+- 📄 **A Confronto con l'IA.docx** - Struttura completa 4 ore
+- 📄 **giugno.docx** - Contenuti avanzati seminario
+- 📄 **Moduli seminario IA Condominio.docx** - Dettagli implementativi
+
+## 🚀 DEPLOYMENT & REPOSITORY
+
+### Repository
+- **GitHub**: https://github.com/Dinda974/ia-confronto
+- **Branch**: main
+- **Ultimo update**: [Data corrente]
+
+### Environment
+- **Development**: `npm start` → localhost:3000
+- **Production**: `npm run build` → build/
+
+## 🔧 DEBUGGING ATTUALE
+
+### Problemi in Risoluzione
+1. **PollParticipant** - Errori integrazione (priorità alta)
+2. **LocalStorage** - Persistenza stato seminario
+3. **Real-time sync** - Dashboard ↔ Partecipanti (simulato)
+
+### Prossimi Fix
+- Integrazione PollParticipant in ModuleOverview
+- Controlli polling dashboard facilitatore
+- Error handling sistema polling
+
+## 🎯 ROADMAP IMMEDIATA
+
+### Sprint Corrente (Polling System)
+- 🚧 **Debug PollParticipant** 
+- ⏳ **Dashboard poll controls**
+- ⏳ **Integration test completo**
+
+### Sprint Successivo (Contenuti)
+- ⏳ **Sezioni dettagliate moduli**
+- ⏳ **Workshop components**
+- ⏳ **Materials download**
+
+### Sprint Futuro (Advanced)
+- ⏳ **Real-time WebSocket** (opzionale)
+- ⏳ **Analytics dashboard**
+- ⏳ **Export results**
+
+---
+
+## 💡 NOTE TECNICHE
+
+**Approccio di Sviluppo:**
+- ✅ **Graduale e iterativo** - Un componente alla volta
+- ✅ **Mobile-first** responsive design
+- ✅ **LocalStorage** per semplicità (no backend)
+- ✅ **Context API** per state management
+- ✅ **CSS puro** organizzato (no framework CSS)
+
+**Principi Architetturali:**
+- **Separazione responsabilità** - Layout/Logic/State divisi
+- **Riusabilità componenti** - Shared components
+- **Manutenibilità** - Codice chiaro e documentato
+- **Performance** - Ottimizzato per 50 utenti simultanei
+
+**Git Workflow:**
+```bash
+feat: description     # Nuove funzionalità
+fix: description      # Bug fix
+style: description    # CSS/UI changes
+refactor: description # Code improvements
 ```
 
-### 3. Sistema Polling (PRIORITÀ MEDIA)
-```javascript
-// Tipi di poll:
-- Alzata mano digitale
-- Multiple choice
-- Scale 1-5
-- Text input
-- Nuvola parole
-```
+---
 
-### 4. Workshop Digitali (PRIORITÀ MEDIA)
-```javascript
-// Attività collaborative:
-- Shared prompt building
-- Caso studio collettivo
-- Voting su soluzioni
-- Brainstorming assistito
-```
-
-## 📱 CONSIDERAZIONI TECNICHE
-
-### Performance
-- Componenti ottimizzati per 50 utenti simultanei
-- LocalStorage per persistenza dati
-- CSS animations con `prefers-reduced-motion`
-
-### Accessibilità
-- Navigazione da tastiera
-- Screen reader compatible
-- Contrasti WCAG compliant
-- Focus indicators visibili
-
-### Browser Support
-- Chrome/Edge (moderni)
-- Safari (iOS/macOS)
-- Firefox
-- Mobile browsers
-
-## 🚀 NEXT STEPS per NUOVA CHAT
-
-1. **Setup Context**: Carica il progetto e verifica funzionamento
-2. **ModuleOverview**: Primo componente sistema moduli
-3. **Facilitator Dashboard**: Controlli base per presentatore
-4. **Poll System**: Implementazione sondaggi semplici
-5. **Workshop Tools**: Attività collaborative base
-
-## 📝 NOTE TECNICHE IMPORTANTI
-
-### CSS Organization
-- `global.css`: Reset, typography, layout base
-- `components.css`: Stili specifici componenti
-- Media queries: Mobile-first approach
-- Animazioni: `prefers-reduced-motion` support
-
-### State Persistence
-- `utils/storage.js`: Wrapper localStorage sicuro
-- Auto-save su `saveProgress()`
-- Recovery automatico all'avvio
-
-### Component Patterns
-- Functional components + hooks
-- Props destructuring
-- Context per state globale
-- Conditional rendering per step
-
-## 🔗 REPOSITORY
-GitHub: https://github.com/Dinda974/ia-confronto
-Branch: main
-
-## 💡 PROMPT PER NUOVA CHAT
-
-"Ciao! Sto continuando lo sviluppo di una SPA React per un seminario interattivo sull'IA per amministratori di condominio. Ho completato l'onboarding e ora devo implementare i moduli del seminario.
-
-Repository: https://github.com/Dinda974/ia-confronto
-
-Ti allego:
-- PROJECT_RESUME.md (stato progetto e architettura)
-- I 3 file docx con i contenuti dettagliati dei moduli
-
-Prossimo obiettivo: implementare il sistema dei moduli del seminario con dashboard facilitatore e polling live, usando i contenuti specifici dai file allegati.
-
-Partiamo?"
+*Ultimo aggiornamento: 04.06.2025 h 14:04 - Sistema moduli e polling implementati*
