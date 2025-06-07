@@ -21,8 +21,8 @@ function Header() {
             <p className="header-subtitle">Strategie Avanzate per Amministratori di Condominio</p>
           </div>
           
-          {/* Facilitator mode toggle - nascosto durante onboarding */}
-          {state.progress.onboardingComplete && (
+          {/* Facilitator mode toggle - nascosto per sessioni attive se non già facilitatore */}
+          {(!state.sessionActive || state.facilitatorMode) && (
             <button 
               onClick={toggleFacilitatorMode}
               className={`facilitator-toggle ${state.facilitatorMode ? 'active' : ''}`}

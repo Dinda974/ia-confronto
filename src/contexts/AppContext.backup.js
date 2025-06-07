@@ -1,6 +1,5 @@
-import React, { createContext, useContext, useReducer, useEffect, useRef } from 'react';
+import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import { loadProgress, saveProgress } from '../utils/storage';
-import { firebaseService } from '../utils/firebase';
 
 const AppContext = createContext();
 
@@ -107,9 +106,7 @@ function appReducer(state, action) {
       };
     
     case 'TOGGLE_FACILITATOR_MODE':
-      const newFacilitatorMode = !state.facilitatorMode;
-      console.log('🎛️ Facilitator mode:', newFacilitatorMode);
-      return { ...state, facilitatorMode: newFacilitatorMode };
+      return { ...state, facilitatorMode: !state.facilitatorMode };
 
     case 'SET_CURRENT_MODULE':
       return { ...state, currentModule: action.payload };
@@ -167,17 +164,8 @@ function appReducer(state, action) {
         pollResults: newResults
       };
 
-    // 🔥 NUOVO: Sync Firebase senza loop
     case 'SYNC_FROM_FIREBASE':
-      const { currentModule, sessionActive, activePoll, pollResults, participants } = action.payload;
-      return {
-        ...state,
-        currentModule: currentModule !== undefined ? currentModule : state.currentModule,
-        sessionActive: sessionActive !== undefined ? sessionActive : state.sessionActive,
-        activePoll: activePoll !== undefined ? activePoll : state.activePoll,
-        pollResults: pollResults || state.pollResults,
-        participants: participants || state.participants
-      };
+      return state; // NO-OP for now
 
     case 'OPEN_WORKSHOP':
       return {
@@ -307,142 +295,36 @@ function calculateReadinessScore(answers) {
 export function AppProvider({ children }) {
   const [state, dispatch] = useReducer(appReducer, initialState);
   const [isInitialized, setIsInitialized] = React.useState(false);
-  
-  // 🔥 ANTI-LOOP: useRef per tracciare Firebase listener
-  const firebaseListenerRef = useRef(null);
-  const isFirebaseInitializedRef = useRef(false);
 
-  // 🔥 STEP 1: Load localStorage only once (UNCHANGED - already safe)
+  // Load localStorage only once on app start
   useEffect(() => {
     if (isInitialized) return;
-  
-    console.log('🔄 Loading saved state...');
-  
-    const savedState = loadProgress();
-    console.log('💾 Saved state:', savedState);
-  
-    if (savedState) {
-    // Process each saved field
-      if (savedState.userProfile) {
-        dispatch({ type: 'UPDATE_USER_PROFILE', payload: savedState.userProfile });
-      }
-      if (savedState.currentStep) {
-        dispatch({ type: 'SET_STEP', payload: savedState.currentStep });
-      }
-      if (savedState.assessmentAnswers) {
-      // Fix: Need to dispatch each answer individually
-        Object.keys(savedState.assessmentAnswers).forEach(questionId => {
-          dispatch({ 
-            type: 'SET_ASSESSMENT_ANSWER', 
-            payload: { 
-              questionId, 
-              answer: savedState.assessmentAnswers[questionId] 
-            } 
-          });
-        });
-      }
-      if (savedState.facilitatorMode === true) {
-        console.log('🎛️ Restoring facilitator mode');
-        dispatch({ type: 'TOGGLE_FACILITATOR_MODE' });
-      }
-      if (savedState.progress) {
-      // We don't have a direct action for this, but it's handled in the save effect
-      }
-    }
-
-  // Generate session ID
-  
-  const getSessionId = () => {
-  // 1. Check URL params first (for participants joining via link)
-    const urlParams = new URLSearchParams(window.location.search);
-    const urlSessionId = urlParams.get('session');
-  
-    if (urlSessionId) {
-      console.log('🔗 Joining session from URL:', urlSessionId);
-      return urlSessionId;
-    }
-  
-  // 2. Check localStorage (for returning users)
-    const savedSessionId = localStorage.getItem('ia-confronto-sessionId');
-    if (savedSessionId) {
-      console.log('💾 Reusing saved session:', savedSessionId);
-      return savedSessionId;
-    }
-  
-  // 3. Generate new session (for facilitators)
-    const newSessionId = firebaseService.generateSessionId();
-    console.log('🆕 Generated new session:', newSessionId);
-    localStorage.setItem('ia-confronto-sessionId', newSessionId);
-    return newSessionId;
-  };
-
-  const sessionId = getSessionId();
-  dispatch({ type: 'SET_SESSION_ID', payload: sessionId });
-  
-  setIsInitialized(true);
-  console.log('✅ Initialization complete');
-}, [isInitialized]);
-
-  // 🔥 STEP 2: Firebase initialization (AFTER localStorage)
-  useEffect(() => {
-    if (!isInitialized || isFirebaseInitializedRef.current || !state.sessionId) return;
-
-    console.log('🔥 Initializing Firebase for session:', state.sessionId);
     
-    const initializeFirebase = async () => {
-      try {
-        // Test Firebase connection
-        const isConnected = await firebaseService.testConnection();
-        dispatch({ type: 'SET_CONNECTION_STATUS', payload: isConnected });
-        
-        if (isConnected) {
-          console.log('✅ Firebase connected');
-          
-          // Setup Firebase listener
-          const unsubscribe = firebaseService.subscribeToSession(state.sessionId, (sessionData) => {
-            if (sessionData) {
-              console.log('📡 Firebase data received:', sessionData);
-              
-              // Sync only specific fields to avoid loops
-              dispatch({ 
-                type: 'SYNC_FROM_FIREBASE', 
-                payload: {
-                  currentModule: sessionData.currentModule,
-                  sessionActive: sessionData.active,
-                  activePoll: sessionData.activePoll,
-                  pollResults: sessionData.pollResults,
-                  participants: sessionData.participants
-                }
-              });
-            }
-          });
-          
-          firebaseListenerRef.current = unsubscribe;
-        } else {
-          console.log('⚠️ Firebase connection failed, using local mode');
+    const savedState = loadProgress();
+    if (savedState) {
+      Object.keys(savedState).forEach(key => {
+        if (key === 'userProfile') {
+          dispatch({ type: 'UPDATE_USER_PROFILE', payload: savedState[key] });
+        } else if (key === 'currentStep') {
+          dispatch({ type: 'SET_STEP', payload: savedState[key] });
+        } else if (key === 'assessmentAnswers') {
+          dispatch({ type: 'SET_ASSESSMENT_ANSWER', payload: savedState[key] });
+        } else if (key === 'facilitatorMode' && savedState[key]) {
+          dispatch({ type: 'TOGGLE_FACILITATOR_MODE' });
         }
-      } catch (error) {
-        console.error('Firebase initialization error:', error);
-        dispatch({ type: 'SET_CONNECTION_STATUS', payload: false });
-      }
-    };
+      });
+    }
 
-    initializeFirebase();
-    isFirebaseInitializedRef.current = true;
+    // Generate session ID
+    const sessionId = 'LOCAL_' + Math.random().toString(36).substr(2, 8).toUpperCase();
+    dispatch({ type: 'SET_SESSION_ID', payload: sessionId });
+    
+    setIsInitialized(true);
+  }, [isInitialized]);
 
-    // Cleanup function
-    return () => {
-      if (firebaseListenerRef.current) {
-        console.log('🧹 Cleaning up Firebase listener');
-        firebaseListenerRef.current();
-        firebaseListenerRef.current = null;
-      }
-    };
-  }, [isInitialized, state.sessionId]);
-
-  // 🔥 STEP 3: Save to localStorage (UNCHANGED - already safe)
+  // Save state to localStorage when it changes
   useEffect(() => {
-    if (!isInitialized) return;
+    if (!isInitialized) return; // Don't save during initialization
     
     const stateToSave = {
       currentStep: state.currentStep,
@@ -454,83 +336,8 @@ export function AppProvider({ children }) {
     saveProgress(stateToSave);
   }, [isInitialized, state.currentStep, state.userProfile, state.assessmentAnswers, state.facilitatorMode, state.progress]);
 
-  // 🔥 ENHANCED DISPATCH with Firebase sync
-  const enhancedDispatch = React.useCallback(async (action) => {
-    console.log('🚀 Dispatch action:', action.type);
-    
-    // Always dispatch locally first
-    dispatch(action);
-
-    // Firebase sync for specific actions (only if connected and facilitator)
-    if (state.isConnected && state.facilitatorMode && state.sessionId) {
-      try {
-        switch (action.type) {
-          case 'START_SESSION':
-            await firebaseService.startSession(state.sessionId);
-            console.log('📡 Session started in Firebase');
-            break;
-            
-          case 'END_SESSION':
-            await firebaseService.endSession(state.sessionId);
-            console.log('📡 Session ended in Firebase');
-            break;
-            
-          case 'SET_CURRENT_MODULE':
-            await firebaseService.setCurrentModule(state.sessionId, action.payload);
-            console.log('📡 Module synced to Firebase:', action.payload);
-            break;
-            
-          case 'START_POLL':
-            await firebaseService.startPoll(state.sessionId, action.payload);
-            console.log('📡 Poll started in Firebase:', action.payload);
-            break;
-            
-          case 'END_POLL':
-            await firebaseService.endPoll(state.sessionId);
-            console.log('📡 Poll ended in Firebase');
-            break;
-            
-          default:
-            // No Firebase action needed
-            break;
-        }
-      } catch (error) {
-        console.error('Firebase sync error:', error);
-        // Continue with local operation
-      }
-    }
-  }, [state.isConnected, state.facilitatorMode, state.sessionId]);
-
-  // 🔥 VOTING function for participants
-  const submitVote = React.useCallback(async (vote) => {
-    if (state.hasVoted) return;
-
-    // Local vote immediately
-    dispatch({ type: 'SET_HAS_VOTED' });
-    dispatch({ type: 'SUBMIT_POLL_RESPONSE', payload: vote });
-
-    // Firebase vote if connected
-    if (state.isConnected && state.sessionId) {
-      try {
-        await firebaseService.votePoll(state.sessionId, vote);
-        console.log('📡 Vote submitted to Firebase:', vote);
-      } catch (error) {
-        console.error('Firebase vote error:', error);
-      }
-    }
-  }, [state.hasVoted, state.isConnected, state.sessionId]);
-
-  const contextValue = {
-    state,
-    dispatch: enhancedDispatch,
-    submitVote,
-    // Helper functions
-    isFirebaseConnected: state.isConnected,
-    connectionStatus: state.isConnected ? '🟢 Connesso' : '🟡 Locale'
-  };
-
   return (
-    <AppContext.Provider value={contextValue}>
+    <AppContext.Provider value={{ state, dispatch }}>
       {children}
     </AppContext.Provider>
   );

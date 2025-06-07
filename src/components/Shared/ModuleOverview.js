@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PollParticipant from './PollParticipant';
 import { useApp } from '../../contexts/AppContext';
+import ModuleContent from './ModuleContent';
 
 function ModuleOverview() {
   const { state, dispatch } = useApp();
+
+  // Bypass onboarding per facilitatori
+  React.useEffect(() => {
+    if (state.facilitatorMode && state.currentStep !== 'modules' && !state.progress.onboardingComplete) {
+      dispatch({ type: 'COMPLETE_ONBOARDING' });
+    }
+  }, [state.facilitatorMode, state.currentStep, state.progress.onboardingComplete, dispatch]);
 
   // Dati moduli dal PROJECT_RESUME
   const modules = [
@@ -90,6 +98,29 @@ function ModuleOverview() {
                   </option>
                 ))}
               </select>
+            </div>
+
+            <div className="module-navigation">
+              <button 
+                onClick={() => dispatch({ 
+                  type: 'SET_CURRENT_MODULE', 
+                  payload: Math.max(0, state.currentModule - 1) 
+                })}
+                disabled={state.currentModule <= 1}
+                className="btn-secondary"
+              >
+                ⬅️ Modulo Precedente
+              </button>
+              <button 
+                onClick={() => dispatch({ 
+                  type: 'SET_CURRENT_MODULE', 
+                  payload: Math.min(4, state.currentModule + 1) 
+                })}
+                disabled={state.currentModule >= 4}
+                className="btn-secondary"
+              >
+                Modulo Successivo ➡️
+              </button>
             </div>
             
             <div className="session-buttons">
@@ -229,33 +260,29 @@ function ModuleOverview() {
           )}
         </div>
 
-        <div className="modules-grid">
-          {modules.map(module => (
-            <div 
-              key={module.id} 
-              className={`module-card ${module.id === state.currentModule ? 'active' : ''} ${module.id < state.currentModule ? 'completed' : ''}`}
-            >
-              <div className="module-header">
-                <span className="module-icon">{module.icon}</span>
-                <div className="module-info">
-                  <h3>Modulo {module.id}</h3>
-                  <h4>{module.title}</h4>
+       {state.currentModule > 0 ? (
+          <ModuleContent />
+        ) : (
+          <div className="modules-grid">
+            {modules.map(module => (
+              <div key={module.id} className="module-card">
+                <div className="module-header">
+                  <span className="module-icon">{module.icon}</span>
+                  <div className="module-info">
+                    <h3>Modulo {module.id}</h3>
+                    <h4>{module.title}</h4>
+                  </div>
                 </div>
-                <div className="module-status">
-                  {module.id === state.currentModule && '▶️'}
-                  {module.id < state.currentModule && '✅'}
-                  {module.id > state.currentModule && '⏳'}
-                </div>
-              </div>
-              <div className="module-content">
-                <p>{module.subtitle}</p>
-                <div className="module-meta">
-                  <span className="duration">⏱️ {module.duration} min</span>
+                <div className="module-content">
+                  <p>{module.subtitle}</p>
+                  <div className="module-meta">
+                    <span className="duration">⏱️ {module.duration} min</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* POLLING OVERLAY PER PARTECIPANTI */}

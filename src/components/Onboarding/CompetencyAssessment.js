@@ -8,6 +8,12 @@ function CompetencyAssessment() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState({});
 
+  // AGGIUNGI questo useEffect dopo gli useState esistenti
+useEffect(() => {
+  // Scroll to top ad ogni cambio domanda
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}, [currentQuestion]);
+
   const question = assessmentQuestions[currentQuestion];
   const isLastQuestion = currentQuestion === assessmentQuestions.length - 1;
   const progress = ((currentQuestion + 1) / assessmentQuestions.length) * 100;
@@ -45,25 +51,10 @@ function CompetencyAssessment() {
   return (
     <div className="assessment-screen fade-in">
       <div className="card card-large">
-        <div className="assessment-header">
-          <div className="assessment-progress">
-            <div className="progress-info">
-              <span className="progress-text">
-                Domanda {currentQuestion + 1} di {assessmentQuestions.length}
-              </span>
-              <span className="progress-percentage">{Math.round(progress)}%</span>
-            </div>
-            <div className="progress-bar-assessment">
-              <div 
-                className="progress-fill-assessment"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-          </div>
-          
+        <div className="assessment-header">          {/* ← AGGIUNGI questo div */}
           <h2>{question.title}</h2>
           <p className="question-subtitle">{question.subtitle}</p>
-        </div>
+        </div>                                       {/* ← AGGIUNGI chiusura div */}
 
         <div className="question-content">
           {question.type === 'scale' && (

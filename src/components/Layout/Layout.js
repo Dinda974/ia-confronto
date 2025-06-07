@@ -10,11 +10,6 @@ function Layout({ children }) {
     <div className="layout">
       <Header />
       
-      {/* Progress bar - mostra solo durante onboarding */}
-      {!state.progress.onboardingComplete && (
-        <ProgressBar />
-      )}
-      
       <main className="main-content">
         <div className="content-wrapper">
           {children}
@@ -24,7 +19,7 @@ function Layout({ children }) {
       {/* Footer con info legali */}
       <footer className="footer">
         <div className="container">
-          <p>© 2025 - Seminario "A Confronto con l'IA" | Avv. [Il tuo nome] | Privacy & GDPR Compliant</p>
+          <p>© 2025 - Seminario "A Confronto con l'IA" | Avv.ta Adriana Augenti | Privacy & GDPR Compliant</p>
         </div>
       </footer>
     </div>
